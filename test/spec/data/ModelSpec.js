@@ -210,5 +210,4 @@ describe("Verify for Model ", function () {
         expect(constant2.equals(constant)).toBeTruthy();
 
     });
-
 });

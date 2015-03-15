@@ -5,6 +5,6 @@ define('data/command/Nil', ['data/Command'], function (Command) {
     return Command.extend();
 });
 
-define('data/command/nil', ['data/Nil'], function (Nil) {
+define('data/command/nil', ['data/command/Nil'], function (Nil) {
     return new Nil();
 });
