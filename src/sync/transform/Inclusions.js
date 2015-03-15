@@ -11,9 +11,9 @@ define('sync/transform/Inclusions', [
     'data/command/Unset',
     'data/command/Construct',
     'data/command/Destruct',
-    'data/command/nil'
+    'data/command/NIL'
 
-], function (exports, Inclusion, Insert, Delete, Set, Unset, Construct, Destruct, nil) {
+], function (exports, Inclusion, Insert, Delete, Set, Unset, Construct, Destruct, NIL) {
 
     var InsertInsert = exports.InsertInsert = Inclusion.extend({
         canInclude: function (c1, c2) {
@@ -36,7 +36,10 @@ define('sync/transform/Inclusions', [
         },
         include: function (c1, c2, inferior) {
             if (c1.offset > c2.offset) {
-                return new Insert(c1.offset - 1, c1.data);
+                return new Insert({
+                    offset: c1.offset - 1,
+                    data : c1.data
+                });
             }
 
             return c1;
@@ -49,7 +52,9 @@ define('sync/transform/Inclusions', [
         },
         include: function (c1, c2, inferior) {
             if (c1.offset >= c2.offset) {
-                return new Delete(c1.offset + 1);
+                return new Delete({
+                    offset: c1.offset + 1
+                });
             }
 
             return c1;
@@ -62,9 +67,11 @@ define('sync/transform/Inclusions', [
         },
         include: function (c1, c2, inferior) {
             if (c1.offset === c2.offset) {
-                return nil;
+                return NIL;
             } else if (c1.offset > c2.offset) {
-                return new Delete(c1.offset - 1);
+                return new Delete({
+                    offset: c1.offset - 1
+                });
             }
 
             return c1;
@@ -77,7 +84,7 @@ define('sync/transform/Inclusions', [
         },
         include: function (c1, c2, inferior) {
             if ((c1.identifier === c2.identifier) && inferior) {
-                return nil
+                return NIL
             }
 
             return c1;
@@ -99,7 +106,7 @@ define('sync/transform/Inclusions', [
         },
         include: function (c1, c2, inferior) {
             if (c1.identifier === c2.identifier) {
-                return nil;
+                return NIL;
             }
 
             return c1;
@@ -113,7 +120,7 @@ define('sync/transform/Inclusions', [
         },
         include: function(c1, c2, inferior) {
             if (c1.identifier === c2.identifier){
-                return nil;
+                return NIL;
             }
 
             return c1;
