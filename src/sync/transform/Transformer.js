@@ -4,15 +4,16 @@
 define('sync/transform/Transformer', [
     'sync/transform/Inclusions'
 ], function (Inclusions) {
+
     var Transformer = function(transformers){
-        this.transformers = transformers || Inclusions.ALL;
+        this.transformers = (transformers || Inclusions.ALL);
     }
 
     Transformer.prototype.transform = function(ol1, ol2, inferior) {
-        var ol  = [];
+        var ol  = ol1.slice();// [];// preserve a copy of the original
 
         for(var i = 0; i < ol1.length; i++){
-            ol[i] = ol1[i].slice(); // preserve a copy of the original
+            //ol[i] = ol1[i].slice();
 
             for(var j = 0; j < ol2.length; j++){
                 // on context equivalence

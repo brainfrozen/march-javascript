@@ -129,7 +129,7 @@ define('sync/transform/Inclusions', [
 
     var NilNil = exports.NilNil = Inclusion.extend({
         canInclude: function(c1, c2) {
-            return c1 instanceof Nil && c2 instanceof Nil;
+            return c1 instanceof Nil || c2 instanceof Nil;
         },
         include: function(c1, c2, inferior) {
             return c1;

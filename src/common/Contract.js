@@ -28,7 +28,10 @@ define('common/Contract', ['underscore'], function (_) {
 
             var declare =  this.declare;
             for(var i = 0; i < declare.length; i++) {
-                if (this[declare[i]] !== obj[declare[i]])
+                if(this[declare[i]] instanceof Contract){
+                    if (!this[declare[i]].equals(obj[declare[i]]))
+                        return false;
+                } else if (this[declare[i]] !== obj[declare[i]])
                     return false;
             }
 

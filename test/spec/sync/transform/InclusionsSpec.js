@@ -9,7 +9,7 @@ var Insert      = require('data/command/Insert'),
     Set         = require('data/command/Set'),
     Unset       = require('data/command/Unset');
 
-    NIL         = require('data/command/nil');
+    NIL         = require('data/command/NIL');
 
 var inclusions  = require('sync/transform/Inclusions');
 
@@ -23,7 +23,7 @@ describe("Verify for Inclusions", function () {
         SETUNS = new inclusions.SetUnset(),
         UNSSET = new inclusions.UnsetSet(),
         UNSUNS = new inclusions.UnsetUnset(),
-        nilnil = new inclusions.NilNil(),
+        NILNIL = new inclusions.NilNil(),
 
         constant1 = new Constant({
             'type':'string',
@@ -128,7 +128,7 @@ describe("Verify for Inclusions", function () {
     });
 
     it("inclusion of set in unset works in inferior mode", function () {
-        expect(SETUNS.include(SET0, UNSET0, true).equals(NIL)).toBeTruthy();
+        expect(SETUNS.include(SET0, UNSET0, true).equals(SET0)).toBeTruthy();
     });
 
     it("inclusion of set in unset works in superior mode", function () {
@@ -141,6 +141,22 @@ describe("Verify for Inclusions", function () {
 
     it("inclusion of unset in unset works in superior mode", function () {
         expect(UNSUNS.include(UNSET0, UNSET0, false).equals(NIL)).toBeTruthy();
+    });
+
+    it("inclusion of any in nil works in inferior mode", function () {
+        expect(NILNIL.include(UNSET0, NIL, true).equals(UNSET0)).toBeTruthy();
+    });
+
+    it("inclusion of any in nil works in superior mode", function () {
+        expect(NILNIL.include(UNSET0, NIL, false).equals(UNSET0)).toBeTruthy();
+    });
+
+    it("inclusion of nil in any works in inferior mode", function () {
+        expect(NILNIL.include(NIL, UNSET0, true).equals(NIL)).toBeTruthy();
+    });
+
+    it("inclusion of nil in any works in superior mode", function () {
+        expect(NILNIL.include(NIL, UNSET0, false).equals(NIL)).toBeTruthy();
     });
 
 });

@@ -1,7 +1,6 @@
 var gulp        = require('gulp');
 var bowerFiles	= require('main-bower-files');
 var inject 		= require("gulp-inject");
-var babel       = require('gulp-babel');
 
 //var jasmine     = require('gulp-jasmine');
 
@@ -28,14 +27,6 @@ gulp.task('SpecRunner.update', function(){
 //        .pipe(jasmine());
 //});
 
-gulp.task('babel', function () {
-    return gulp.src('es6/**/*.js')
-        .pipe(babel({
-            'modules':'amd',
-            'moduleIds': true
-        }))
-        .pipe(gulp.dest('dist'));
-});
 
 
 gulp.task("default", ["SpecRunner.update"]);

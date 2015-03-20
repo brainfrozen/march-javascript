@@ -10,7 +10,6 @@
     "gulp": "^3.8.10"
   },
   "devDependencies": {
-    "gulp-babel": "^4.0.0",
     "gulp-bower": "0.0.10",
     "gulp-inject": "^1.1.1",
     "gulp-jasmine": "^2.0.0",
