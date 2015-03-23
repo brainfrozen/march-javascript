@@ -7,7 +7,7 @@ var Constant    = require('data/Constant'),
 
 var Insert      = require('data/command/Insert');
 
-var Operation   = require('sync/buffer/Operation');
+var Operation   = require('sync/channel/Operation');
 
 var Transformer = require('sync/transform/Transformer');
 
