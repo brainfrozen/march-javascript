@@ -131,4 +131,71 @@ describe('Verify for MemberEndpoint', function () {
         expect(endpoint.remoteTime).toBe(2);
 
     });
+
+    it('synchronization works for inequivalent operation contexts', function(){
+        var ol0 = [ a0, b0 ],
+            ol1 = [ c0, d0 ],
+
+            clk1 = new Clock(),
+            clk2 = new Clock(),
+
+            m0 = new Message({
+                member : member0,
+                memberTime : clk1.tick(),
+                leaderTime : 0,
+                operations : ol0
+            }),
+
+            m1 = new Message({
+                member : member1,
+                memberTime : 0,
+                leaderTime : clk2.tick(),
+                operations : ol1
+            });
+
+        endpoint
+            .send(m0)
+            .receive(m1);
+
+        expect(inBuffer.length).toBe(1);
+
+        m0 = inBuffer.shift();
+        expect(c2.equals(m0.operations[0])).toBeTruthy();
+        expect(d2.equals(m0.operations[1])).toBeTruthy();
+
+    });
+
+    it('synchronization works for equivalent operation contexts', function(){
+        var ol0 = [ a0, b0 ],
+            ol1 = [ c0, d0 ],
+
+            clk1 = new Clock(),
+            clk2 = new Clock(),
+
+            m0 = new Message({
+                member : member0,
+                memberTime : clk1.tick(),
+                leaderTime : 0,
+                operations : ol0
+            }),
+
+            m1 = new Message({
+                member : member1,
+                memberTime : clk1.time,
+                leaderTime : clk2.tick(),
+                operations : ol1
+            });
+
+        endpoint
+            .send(m0)
+            .receive(m1);
+
+        expect(inBuffer.length).toBe(1);
+
+        m0 = inBuffer.shift();
+        expect(c0.equals(m0.operations[0])).toBeTruthy();
+        expect(d0.equals(m0.operations[1])).toBeTruthy();
+
+    });
+
 });

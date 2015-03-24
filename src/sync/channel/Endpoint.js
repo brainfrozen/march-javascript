@@ -32,7 +32,7 @@ define('sync/channel/Endpoint', [
 
             // remove messages member has seen already
             try {
-                while(queue.length > 0 && after(this.getLocalTime(queue[0]), this.getLocalTime(message))){
+                while(queue.length > 0 && !after(this.getLocalTime(queue[0]), this.getLocalTime(message))){
                     queue.shift();
                 }
 
