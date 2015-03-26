@@ -3,23 +3,21 @@
  */
 
 define('sync/channel/Endpoint', [
-    'common/Contract',
+    'common/Events',
     'sync/time/after',
     'sync/transform/Transformer'
 
-], function (Contract, after, Transformer) {
+], function (Events, after, Transformer) {
 
     var _abstractFunction = function(){
         throw new Error('UnimplementedFunction');
     }
 
-    var Endpoint = Contract.extend({
+    var Endpoint = Events.extend({
 
         declare : ['remoteTime', 'queue'],
 
         initialize: function(){
-            this.handlers = {};
-
             this.queue = [];
 
             this.remoteTime    = 0;
@@ -49,12 +47,7 @@ define('sync/channel/Endpoint', [
 
                 this.remoteTime = this.getRemoteTime(message); // make sure time is preserved on empty queue
 
-                var handlers = this.handlers['inbound'];
-                if(handlers) {
-                    for (var i = 0; i < handlers.length; i++) {
-                        handlers[i](message);
-                    }
-                }
+                this.trigger('inbound', message);
 
             } catch (e) {
                 throw new Error('ChannelException');
@@ -70,47 +63,7 @@ define('sync/channel/Endpoint', [
 
             this.queue.push(message);
 
-            var handlers = this.handlers['outbound'];
-            if(handlers) {
-                for (var i = 0; i < handlers.length; i++) {
-                    handlers[i](message);
-                }
-            }
-
-            return this;
-        },
-
-        on : function(event, handler){
-            if (handler && typeof handler === 'function') {
-                var handlers = this.handlers[event] || (this.handlers[event] = []);
-
-                handlers.push(handler);
-            }
-
-            return this;
-        },
-
-        off : function(event, handler){
-            if(handler){
-                var handlers = this.handlers[event];
-                if(handlers){
-                    var k = -1;
-                    for(var i = 0; i < handlers.length; i++){
-                        if(handlers[i] = handler) {
-                            k = i;
-                            break;
-                        }
-                    }
-
-                    if(k >= 0){
-                        handlers.splice(k, 1);
-                    }
-                }
-            } else if (event){
-                delete this.handlers[event];
-            } else {
-                this.handlers = {};
-            }
+            this.trigger('outbound', message);
 
             return this;
         },
