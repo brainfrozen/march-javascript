@@ -3,11 +3,10 @@
  */
 
 var Constant    = require('data/Constant'),
-    Pointer     = require('data/Pointer');
+    Pointer     = require('data/Pointer'),
+    Operation   = require('data/Operation');
 
 var Insert      = require('data/command/Insert');
-
-var Operation   = require('sync/channel/Operation');
 
 var Transformer = require('sync/transform/Transformer');
 

@@ -2,8 +2,9 @@
  * Created by dli on 25.01.2015.
  */
 var Model       = require('data/Model'),
-    Pointer     = require('data/Pointer');
-    Constant    = require('data/Constant');
+    Pointer     = require('data/Pointer'),
+    Constant    = require('data/Constant'),
+    Operation   = require('data/Operation'),
     Set         = require('data/command/Set'),
     Unset       = require('data/command/Unset'),
     Insert      = require('data/command/Insert'),
@@ -53,6 +54,25 @@ describe("Verify for Model ", function () {
             constant2;
 
         model.evaluate(null, set);
+
+        constant2 = model.find(null,'test');
+
+        expect(constant2.equals(constant)).toBeTruthy();
+    });
+
+    it("setting a primitive as operation works", function () {
+        var   set = new Set({
+                'identifier':'test',
+                'data': constant
+            }),
+            o = new Operation({
+                pointer:null,
+                command: set
+            }),
+            constant2;
+
+
+        model.evaluate(o);
 
         constant2 = model.find(null,'test');
 

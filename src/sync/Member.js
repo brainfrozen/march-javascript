@@ -6,9 +6,9 @@ define('sync/Member', [
     'common/Util',
     'common/Events',
     'data/Model',
+    'data/Operation',
     'sync/channel/MemberEndpoint',
-    'sync/channel/Message',
-    'sync/channel/Operation'
+    'sync/channel/Message'
 
 ], function (Util, Events, Model, MemberEndpoint, Message, Operation) {
 
@@ -28,7 +28,7 @@ define('sync/Member', [
             endpoint.on('inbound', function(message){
                 var operations = message.operations;
                 for(var i = 0; i < operations.length; i++){
-                    model.evaluate(operations[i].pointer, operations[i].command);
+                    model.evaluate(operations[i]);
 
                     self.trigger('all', operations[i].pointer, operations[i].command);
                 }

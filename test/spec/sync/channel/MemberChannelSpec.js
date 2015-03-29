@@ -5,12 +5,12 @@
 var Constant        = require('data/Constant'),
     Pointer         = require('data/Pointer');
 
-var Insert          = require('data/command/Insert');
+var Operation       = require('data/Operation'),
+    Insert          = require('data/command/Insert');
 
 var Clock           = require('sync/time/Clock');
 
-var Operation       = require('sync/channel/Operation'),
-    Message         = require('sync/channel/Message'),
+var Message         = require('sync/channel/Message'),
     MemberEndpoint  = require('sync/channel/MemberEndpoint');
 
 describe('Verify for MemberEndpoint', function () {

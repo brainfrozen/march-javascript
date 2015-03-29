@@ -13,6 +13,52 @@ define('data/Model', [
 
     function (Pointer, Construct, Destruct, Insert, Delete, Set, Unset) {
 
+        function _serialize (pointer, target){
+            switch(_typeOf(target)){
+                case 'HASH': return _serializeHash(pointer, target); break;
+                case 'SEQUENCE': return _serializeSequence(pointer, target); break;
+            }
+        }
+
+
+        function _serializeSequence (pointer, sequence){
+            var output = [];
+
+            for(var i = 0; i < sequence.length; i++){
+                output.push(new Operation({
+                    pointer: pointer,
+                    command: new Insert({
+                        offset: i,
+                        data: sequence[i]
+                    })
+                }));
+            }
+
+            return output;
+        }
+
+        function _serializeHash (pointer, hash){
+            var output = [];
+
+            for(var i in hash){
+                output.push(new Operation({
+                    pointer: pointer,
+                    command: new Set({
+                        identifier: i,
+                        data: sequence[i]
+                    })
+                }));
+            }
+
+            return output;
+        }
+
+        function _typeOf(target){
+            if(typeof target !== 'undefined' && target != null) {
+                return target instanceof Array ? 'SEQUENCE' : 'HASH';
+            }
+        }
+
         var Model = function(){
             this._base = new Pointer();
 
@@ -20,16 +66,23 @@ define('data/Model', [
             this._memory[this._base.address] = {};
         };
 
-        Model.prototype.evaluate = function(pointer){
+        Model.prototype.evaluate = function(){
+            var pointer, commands, command;
+
+            if(arguments[0] instanceof Operation){
+                pointer = arguments[0].pointer;
+                commands = [arguments[0].command];
+            } else {
+                pointer = arguments[0];
+                commands = Array.prototype.slice.call(arguments, 1);
+            }
+
             var target;
             if(pointer){
                 target = this._memory[pointer.address];
             } else {
                 target = this._memory[this._base.address];
             }
-
-            var commands = Array.prototype.slice.call(arguments, 1),
-                command;
 
             for (var i = 0; i < commands.length; i++) {
                 command = commands[i];
@@ -85,22 +138,43 @@ define('data/Model', [
         Model.prototype.getType = function(pointer){
             if(pointer){
                 var target = this._memory[pointer.address];
+                return _typeOf(target);
+            }
+        }
 
-                if(typeof target !== 'undefined' && target != null) {
-                    return target instanceof Array ? 'SEQUENCE' : 'HASH';
+        Model.prototype.serialize = function(pointer){
+            var memory = this._memory,
+                target;
+
+            if(pointer){
+                target = memory[pointer.address];
+                return _serialize(pointer, target);
+            } else {
+                var output = [];
+
+                for (var i in memory) {
+                    target = memory[i];
+
+                    pointer = (i === this._base.address ? null : new Pointer({address: i}));
+
+                    // if not root add construct operation
+                    if (pointer) {
+                        output.push(new Operation({
+                            pointer: pointer,
+                            command: new Construct({
+                                type: _typeOf(target)
+                            })
+                        }));
+                    }
+
+                    // write data out
+                    output.concat(_serialize(pointer, target));
                 }
+
+                return output;
             }
         }
 
         return Model;
     }
 );
-
-
-/*
- public void apply(Pointer pointer, Command... commands) throws ObjectException, CommandException;
-
- public Data find(Pointer pointer, String identifier) throws ObjectException, CommandException;
-
- public Data find(Pointer pointer, int index) throws ObjectException, CommandException;
- */

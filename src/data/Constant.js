@@ -3,6 +3,6 @@
  */
 define('data/Constant', ['data/Data'], function (Data) {
     return Data.extend({
-        declare: ['value', 'type']
+        declare: ['value', 'type'] //types: number, string, boolean
     });
 });
