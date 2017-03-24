@@ -13,13 +13,16 @@ define('data/Model', [
 
     function (Pointer, Construct, Destruct, Insert, Delete, Set, Unset) {
 
+        function _isArray(arg){
+            return typeof arg === 'object' && arg instanceof Array;
+        }
+
         function _serialize (pointer, target){
             switch(_typeOf(target)){
                 case 'HASH': return _serializeHash(pointer, target); break;
                 case 'SEQUENCE': return _serializeSequence(pointer, target); break;
             }
         }
-
 
         function _serializeSequence (pointer, sequence){
             var output = [];
@@ -102,10 +105,10 @@ define('data/Model', [
                     delete this._memory[pointer.address];
                     target = null;
                 } else if (command instanceof Insert) {
-                    if (!_.isArray(target)) throw new Error('TypeException');
+                    if (!_isArray(target)) throw new Error('TypeException');
                     target.splice(command.offset, 0, command.data);
                 } else if (command instanceof Delete) {
-                    if (!_.isArray(target)) throw new Error('TypeException');
+                    if (!_isArray(target)) throw new Error('TypeException');
                     target.splice(command.offset, 1);
                 } else if (command instanceof Set) {
                     if (typeof target !== 'object') throw new Error('TypeException');

@@ -1,17 +1,52 @@
 /**
  * Created by dli on 22.02.2015.
+ * @deprecated use es6 classes instead
  */
-define('common/Contract', ['underscore'], function (_) {
+define('common/Contract', [], function () {
+
+    // some boilerplate taken from underscore
+    function _isObject(obj) {
+        var type = typeof obj;
+        return type === 'function' || type === 'object' && !!obj;
+    };
+
+    function _allKeys(obj) {
+        if (!_isObject(obj)) return [];
+        var keys = [];
+        for (var key in obj) keys.push(key);
+        return keys;
+    }
+
+    function _createAssigner(keysFunc, undefinedOnly) {
+        return function(obj) {
+            var length = arguments.length;
+            if (length < 2 || obj == null) return obj;
+            for (var index = 1; index < length; index++) {
+                var source = arguments[index],
+                    keys = keysFunc(source),
+                    l = keys.length;
+                for (var i = 0; i < l; i++) {
+                    var key = keys[i];
+                    if (!undefinedOnly || obj[key] === void 0) obj[key] = source[key];
+                }
+            }
+            return obj;
+        };
+    };
+
+    var _extend     = _createAssigner(_allKeys);
+    var _defaults   = _createAssigner(_allKeys, true);
+
 
     var Contract = function (attributes){
-        if(attributes && _.isObject(attributes)) {
-            _.defaults(this, attributes);
+        if(attributes && _isObject(attributes)) {
+            _defaults(this, attributes);
         }
 
         this.initialize.apply(this, arguments);
     }
 
-    _.extend(Contract.prototype, {
+    _extend(Contract.prototype, {
         declare: [],
         initialize : function () {
         },
@@ -36,9 +71,6 @@ define('common/Contract', ['underscore'], function (_) {
             }
 
             return true;
-        },
-        asPlainObject : function(){
-            return _.pick(this, this.declare);
         }
     });
 
@@ -55,14 +87,14 @@ define('common/Contract', ['underscore'], function (_) {
         // The constructor function for the new subclass is either defined by you
         // (the "constructor" property in your `extend` definition), or defaulted
         // by us to simply call the parent's constructor.
-        if (protoProps && _.has(protoProps, 'constructor')) {
+        if (protoProps && protoProps.hasOwnProperty('constructor')) {
             child = protoProps.constructor;
         } else {
             child = function(){ return parent.apply(this, arguments); };
         }
 
         // Add static properties to the constructor function, if supplied.
-        _.extend(child, parent, staticProps);
+        _extend(child, parent, staticProps);
 
         // Set the prototype chain to inherit from `parent`, without calling
         // `parent`'s constructor function.
@@ -72,7 +104,7 @@ define('common/Contract', ['underscore'], function (_) {
 
         // Add prototype properties (instance properties) to the subclass,
         // if supplied.
-        if (protoProps) _.extend(child.prototype, protoProps);
+        if (protoProps) _extend(child.prototype, protoProps);
 
         // Set a convenience property in case the parent's prototype is needed
         // later.

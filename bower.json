@@ -25,7 +25,6 @@
     "jasmine-standalone": "*"
   },
   "dependencies": {
-    "almond": "~0.3.0",
-    "underscore": "~1.8.2"
+    "almond": "~0.3.0"
   }
 }

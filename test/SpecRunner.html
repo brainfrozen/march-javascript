@@ -8,7 +8,6 @@
 
   <!-- inject:js -->
   <script src="../bower_components/almond/almond.js"></script>
-  <script src="../bower_components/underscore/underscore.js"></script>
   <script src="../bower_components/jasmine-standalone/jasmine-standalone.js"></script>
   <script src="../src/common/Contract.js"></script>
   <script src="../src/common/Events.js"></script>
@@ -20,6 +19,13 @@
   <script src="../src/data/Operation.js"></script>
   <script src="../src/data/Pointer.js"></script>
   <script src="../src/sync/Member.js"></script>
+  <script src="../src/data/command/Construct.js"></script>
+  <script src="../src/data/command/Delete.js"></script>
+  <script src="../src/data/command/Destruct.js"></script>
+  <script src="../src/data/command/Insert.js"></script>
+  <script src="../src/data/command/Nil.js"></script>
+  <script src="../src/data/command/Set.js"></script>
+  <script src="../src/data/command/Unset.js"></script>
   <script src="../src/sync/channel/Endpoint.js"></script>
   <script src="../src/sync/channel/MemberEndpoint.js"></script>
   <script src="../src/sync/channel/Message.js"></script>
@@ -29,18 +35,13 @@
   <script src="../src/sync/transform/Inclusion.js"></script>
   <script src="../src/sync/transform/Inclusions.js"></script>
   <script src="../src/sync/transform/Transformer.js"></script>
-  <script src="../src/data/command/Construct.js"></script>
-  <script src="../src/data/command/Delete.js"></script>
-  <script src="../src/data/command/Destruct.js"></script>
-  <script src="../src/data/command/Insert.js"></script>
-  <script src="../src/data/command/Nil.js"></script>
-  <script src="../src/data/command/Set.js"></script>
-  <script src="../src/data/command/Unset.js"></script>
+  <script src="../dist/march.js"></script>
+  <script src="../dist/march.min.js"></script>
+  <script src="spec/sync/channel/MemberChannelSpec.js"></script>
   <script src="spec/sync/time/afterSpec.js"></script>
   <script src="spec/sync/time/ClockSpec.js"></script>
   <script src="spec/sync/transform/InclusionsSpec.js"></script>
   <script src="spec/sync/transform/TransformerSpec.js"></script>
-  <script src="spec/sync/channel/MemberChannelSpec.js"></script>
   <script src="spec/common/ContractSpec.js"></script>
   <script src="spec/data/ModelSpec.js"></script>
   <!-- endinject -->
